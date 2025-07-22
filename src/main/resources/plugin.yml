@@ -1,0 +1,48 @@
+name: DSLPlugin
+version: '${version}'
+main: org.dslofficial.DSLPlugin
+api-version: 1.18
+commands:
+  # 서버관리자 전용 명령어
+
+  permission:
+    description: 사용자의 권한을 관리하는 명령어입니다.
+    usage: '/permission [플레이어] [add/remove] [권한이름]'
+    aliases: perm
+
+  # 관리자 전용 명령어
+
+  kill:
+    description: 특정 플레이어 또는 자신을 죽일 수 있는 명령어입니다.
+    usage: '/kill [플레이어]'
+
+  getitem:
+    description: 관리자에게 관리 아이템을 지급합니다.
+    usage: '/getitem [플레이어]'
+    aliases: gi
+
+  point:
+    description: 한 좌표를 저장하고, 텔레포트하는 명령어입니다.
+    usage: '/point [set|remove|move] [포인트 이름]'
+    aliases: pt
+
+  # Console 전용 명령어
+
+  stop:
+    description: 서버를 종료합니다.
+    usage: '/stop'
+
+  addplayer:
+    description: 사용자를 서버에 추가합니다.
+    usage: '/addplayer [이름] [역할]'
+
+  mm:
+    description: 특정 플레이어의 돈을 설정할 수 있는 명령어입니다. (You can use this command in bukkit console only.)
+    usage: '/mm [플레이어] set [금액]'
+
+  # 공개 명령어
+
+  money:
+    description: 돈 관련 명령어입니다.
+    usage: '/money [send/get] [금액] [대상]'
+    aliases: m
