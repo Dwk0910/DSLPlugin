@@ -37,7 +37,7 @@ public class AutoItemClear extends BukkitRunnable {
                 }
             }
 
-            s.broadcastMessage(PrintHeader.header("info", "아이템 " + ChatColor.GREEN + count + "" + ChatColor.WHITE + "개를 성공적으로 제거했습니다."));
+            s.broadcastMessage(PrintHeader.header("info", "아이템 " + ChatColor.GREEN + count +  ChatColor.WHITE + "개를 성공적으로 제거했습니다."));
         } catch (Exception e) {
             e.printStackTrace();
         }
