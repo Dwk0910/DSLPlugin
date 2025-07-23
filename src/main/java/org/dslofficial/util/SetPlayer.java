@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"CallToPrintStackTrace", "unchecked"})
 public class SetPlayer {
     public static void edit(String name, String targetKey, String value) {
         JSONParser parser = new JSONParser();

@@ -46,3 +46,7 @@ commands:
     description: 돈 관련 명령어입니다.
     usage: '/money [send/get] [금액] [대상]'
     aliases: m
+
+  clearitem:
+    description: 떨어진 아이템을 청소하는 수동 명령어입니다.
+    aliases: ci
