@@ -2,6 +2,7 @@ package org.dslofficial;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+
 import org.dslofficial.commands.*;
 import org.dslofficial.commands.completes.*;
 import org.dslofficial.commands.replaces.*;
@@ -14,7 +15,7 @@ import org.dslofficial.util.GetPlayer;
 import org.dslofficial.tasks.*;
 import org.dslofficial.util.SharedData;
 
-import java.io.*;
+import java.io.File;
 
 import java.util.Objects;
 
@@ -79,6 +80,8 @@ public final class DSLPlugin extends JavaPlugin {
         // Console 전용 명령어
         Objects.requireNonNull(getCommand("mm")).setExecutor(new MoneyManagement());
         Objects.requireNonNull(getCommand("stop")).setExecutor(new Stop());
+        sharedData.setBoolean("isrunning_Stop", false);
+
         Objects.requireNonNull(getCommand("addplayer")).setExecutor(new AddPlayer()); // console only.
 
         // 공개 명령어

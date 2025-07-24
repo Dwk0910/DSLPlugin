@@ -31,9 +31,7 @@ import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.List;
+import java.util.*;
 
 public class Event implements Listener {
     @EventHandler
@@ -112,6 +110,8 @@ public class Event implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
+
+        System.out.println(PrintHeader.header("info", "플레이어 " + ChatColor.AQUA + p.getName() + ChatColor.WHITE + " 이(가) 사망하였습니다 : " + e.getDeathMessage()));
         e.setDeathMessage(PrintHeader.header("info", "플레이어 " + ChatColor.AQUA + p.getName() + ChatColor.WHITE + " 이(가) 사망하셨습니다."));
     }
 
