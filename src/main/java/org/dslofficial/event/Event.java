@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
+import java.util.List;
 
 public class Event implements Listener {
     @EventHandler
@@ -145,7 +147,7 @@ public class Event implements Listener {
         Player p = Objects.requireNonNull(e.getDamager().getServer().getPlayer(e.getDamager().getName()));
 
         if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
-            if (e.getEntityType() == EntityType.ITEM_FRAME & !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(itmname)) {
+            if (e.getEntityType() == EntityType.ITEM_FRAME && !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(itmname)) {
                 e.setCancelled(true);
             }
         } else e.setCancelled(true);
@@ -181,6 +183,7 @@ public class Event implements Listener {
         }
     }
 
+
     // 인터렉트 이벤트 (수표)
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
@@ -189,7 +192,7 @@ public class Event implements Listener {
         // 수표
         // 손에 아이템이 없을 경우 return
         if (p.getInventory().getItemInMainHand().getItemMeta() == null) return;
-        if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("수 표") & p.getInventory().getItemInMainHand().getType() == Material.PAPER) {
+        if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("수 표") && p.getInventory().getItemInMainHand().getType() == Material.PAPER) {
             List<String> lore = p.getInventory().getItemInMainHand().getItemMeta().getLore();
             if (lore == null) return;
             if (lore.size() != 3) return;

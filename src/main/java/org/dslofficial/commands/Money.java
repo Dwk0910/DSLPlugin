@@ -10,19 +10,21 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.dslofficial.DSLPlugin;
-import org.dslofficial.util.*;
-import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import java.util.*;
+import org.dslofficial.util.*;
+
+import org.jetbrains.annotations.NotNull;
+
+import org.json.simple.JSONObject;
+
+import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Money implements CommandExecutor {
     @Override public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String str, @NotNull String[] arg) {
-        String url = DSLPlugin.url;
         if (!(sender instanceof Player)) {
             sender.sendMessage(PrintHeader.header("error", "이 명령어는 플레이어만 사용 가능합니다.\n(콘솔에서 플레이어의 돈을 관리하려면 'mm' 명령어를 사용하시기 바랍니다.)"));
             return true;
@@ -110,7 +112,6 @@ public class Money implements CommandExecutor {
                         return true;
                     }
 
-                    JSONParser parser = new JSONParser();
                     JSONObject senderobj = GetPlayer.run(sender.getName());
 
                     if (Integer.parseInt(senderobj.get("money").toString()) < Integer.parseInt(arg[1])) {
@@ -118,7 +119,7 @@ public class Money implements CommandExecutor {
                         return true;
                     }
 
-                    String itemname = ChatColor.GRAY + "" + ChatColor.BOLD + "[ " + ChatColor.RESET + "" + ChatColor.RED + ChatColor.BOLD + "수 표" + ChatColor.RESET + ChatColor.GRAY + ChatColor.BOLD + " ] " + ChatColor.RESET + ChatColor.YELLOW + arg[1] + " DS";
+                    String itemname = ChatColor.GRAY + "" + ChatColor.BOLD + "[ " + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD + "수 표" + ChatColor.RESET + ChatColor.GRAY + ChatColor.BOLD + " ] " + ChatColor.RESET + ChatColor.YELLOW + arg[1] + " DS";
                     List<String> lore = new ArrayList<>();
                     lore.add(ChatColor.WHITE + "현금과 같은 역할을 하는 " + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD + "수표" + ChatColor.RESET + ChatColor.WHITE + "입니다.");
                     lore.add(ChatColor.RESET + "" + ChatColor.WHITE + "이 수표는 " + ChatColor.YELLOW + arg[1] + " DS" + ChatColor.RESET + ChatColor.WHITE + " 만큼의 가치가 있으며, " + ChatColor.GREEN + ChatColor.BOLD + "마우스 우클릭" + ChatColor.RESET + ChatColor.WHITE + "을 하시면 소지금에 " + ChatColor.RESET + ChatColor.YELLOW + arg[1] + " DS" + ChatColor.RESET + ChatColor.WHITE+ " 만큼을 추가합니다.");
@@ -127,7 +128,7 @@ public class Money implements CommandExecutor {
                     ItemStack paper = new ItemStack(Material.PAPER);
                     ItemMeta papermeta = paper.getItemMeta();
 
-                    papermeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 10, true);
+                    Objects.requireNonNull(papermeta).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 10, true);
                     papermeta.setDisplayName(itemname);
                     papermeta.setLore(lore);
                     paper.setItemMeta(papermeta);

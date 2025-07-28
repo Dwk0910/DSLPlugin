@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Point implements CommandExecutor {
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player p) {
             if (!TestArguments.test(1, args)) {
-                if (TestArguments.test(2, args) & !args[0].equalsIgnoreCase("list")) {
+                if (TestArguments.test(2, args) && !args[0].equalsIgnoreCase("list")) {
                     sender.sendMessage(PrintHeader.header("error", "커맨드를 잘못 사용하셨습니다."));
                     sender.sendMessage(PrintHeader.header("error", "사용법 : /point [set/remove/move] [포인트 이름]"));
                     return true;

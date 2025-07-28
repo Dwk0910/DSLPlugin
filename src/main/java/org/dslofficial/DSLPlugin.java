@@ -25,7 +25,6 @@ public final class DSLPlugin extends JavaPlugin {
         return dataFolder;
     }
 
-    public static String url = "https://dslbackend.kro.kr/dslofficial/minecraft/";
     public static Server server;
     public static final SharedData sharedData = new SharedData();
 
