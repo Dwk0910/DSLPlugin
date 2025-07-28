@@ -36,7 +36,6 @@ public class Permission implements CommandExecutor {
             args[2] = permission name
              */
 
-
             // Error handling
             /*
                 Add -> 3개 필요

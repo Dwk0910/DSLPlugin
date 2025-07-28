@@ -11,8 +11,10 @@ import org.dslofficial.DSLPlugin;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class Reload {
     public static String uptime_str = "";
     public static void reload(Player p) {
@@ -20,7 +22,7 @@ public class Reload {
 
         // Scoreboard reload
         ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-        Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
+        Scoreboard scoreboard = Objects.requireNonNull(scoreboardManager).getNewScoreboard();
 
         // PREPARE FOR SCOREBOARD
         // Get Uptime
@@ -47,11 +49,10 @@ public class Reload {
         }
 
         // Get Online
-        int count = 0;
         String online_s = s.getOnlinePlayers().size() + " / " + s.getMaxPlayers();
 
         // Create Scoreboard
-        Objective obj_sc = scoreboard.registerNewObjective("main", "main");
+        Objective obj_sc = scoreboard.registerNewObjective("main", "main", "main");
         obj_sc.setDisplayName(ChatColor.GRAY + " [ " + ChatColor.GREEN + "DSL SERVER" + ChatColor.GRAY + " ] ");
         obj_sc.setDisplaySlot(DisplaySlot.SIDEBAR);
 

@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"CallToPrintStackTrace", "unchecked"})
 public class SetPlayer {
     public static void edit(String name, String targetKey, String value) {
         JSONParser parser = new JSONParser();
 
-        if (findKey(targetKey) & /* 기존 플레이어용 -> */ !targetKey.equals("permission")) {
+        if (findKey(targetKey) && /* 기존 플레이어용 -> */ !targetKey.equals("permission")) {
             throw new Error("key '" + targetKey + "' is invalid.");
         }
 

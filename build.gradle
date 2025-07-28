@@ -18,8 +18,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    implementation fileTree(dir: 'libs', includes: ['*.jar'])
+    implementation 'org.jetbrains:annotations:26.0.2'
 }
 
 def targetJavaVersion = 17

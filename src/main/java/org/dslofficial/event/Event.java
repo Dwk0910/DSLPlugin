@@ -1,9 +1,9 @@
 package org.dslofficial.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -30,7 +30,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+
+import java.util.Date;
+import java.util.Objects;
+import java.util.List;
 
 public class Event implements Listener {
     @EventHandler
@@ -57,7 +60,6 @@ public class Event implements Listener {
     @EventHandler
     public void onResourceLoad(PlayerResourcePackStatusEvent e) {
         Player p = e.getPlayer();
-        Server s = p.getServer();
 
         if (e.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
             Date date = new Date(p.getLastPlayed());
@@ -80,7 +82,7 @@ public class Event implements Listener {
     }
 
     @EventHandler
-    public void onChat(PlayerChatEvent e) {
+    public void onChat(AsyncPlayerChatEvent e) {
         String target, senderName, senderPermission;
         target = e.getMessage();
         senderName = e.getPlayer().getName();
@@ -95,21 +97,23 @@ public class Event implements Listener {
         멤버 -> green, nobold
          */
 
-        String perm = "";
-        switch (senderPermission) {
-            case "leader" -> perm = ChatColor.DARK_RED + "" + ChatColor.BOLD + "총관리자";
-            case "v.leader" -> perm = ChatColor.RED + "" + ChatColor.BOLD + "부관리자";
-            case "manager" -> perm = ChatColor.YELLOW + "매니저";
-            case "member" -> perm = ChatColor.GREEN + "멤버";
-        }
+        final String perm = switch (senderPermission) {
+            case "leader" -> ChatColor.DARK_RED + "" + ChatColor.BOLD + "총관리자";
+            case "v.leader" -> ChatColor.RED + "" + ChatColor.BOLD + "부관리자";
+            case "manager" -> ChatColor.YELLOW + "매니저";
+            case "member" -> ChatColor.GREEN + "멤버";
+            default -> "알 수 없음";
+        };
 
         e.setCancelled(true);
-        DSLPlugin.server.broadcastMessage(ChatColor.AQUA + senderName + ChatColor.GRAY + " [" + perm + ChatColor.GRAY + "]" + ChatColor.GOLD + " : " + ChatColor.WHITE + target);
+        Bukkit.getScheduler().runTask(DSLPlugin.getPlugin(DSLPlugin.class), () -> DSLPlugin.server.broadcastMessage(ChatColor.AQUA + senderName + ChatColor.GRAY + " [" + perm + ChatColor.GRAY + "]" + ChatColor.GOLD + " : " + ChatColor.WHITE + target));
     }
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
+
+        System.out.println(PrintHeader.header("info", "플레이어 " + ChatColor.AQUA + p.getName() + ChatColor.WHITE + " 이(가) 사망하였습니다 : " + e.getDeathMessage()));
         e.setDeathMessage(PrintHeader.header("info", "플레이어 " + ChatColor.AQUA + p.getName() + ChatColor.WHITE + " 이(가) 사망하셨습니다."));
     }
 
@@ -143,7 +147,7 @@ public class Event implements Listener {
         Player p = Objects.requireNonNull(e.getDamager().getServer().getPlayer(e.getDamager().getName()));
 
         if (p.getInventory().getItemInMainHand().getItemMeta() != null) {
-            if (e.getEntityType() == EntityType.ITEM_FRAME & !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(itmname)) {
+            if (e.getEntityType() == EntityType.ITEM_FRAME && !p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(itmname)) {
                 e.setCancelled(true);
             }
         } else e.setCancelled(true);
@@ -175,9 +179,10 @@ public class Event implements Listener {
 
         // 회전억제
         if (e.getRightClicked().getType() == EntityType.ITEM_FRAME) {
-            if (!p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("ImageMap")) e.setCancelled(true);
+            if (!Objects.requireNonNull(p.getInventory().getItemInMainHand().getItemMeta()).getDisplayName().contains("ImageMap")) e.setCancelled(true);
         }
     }
+
 
     // 인터렉트 이벤트 (수표)
     @EventHandler
@@ -187,7 +192,7 @@ public class Event implements Listener {
         // 수표
         // 손에 아이템이 없을 경우 return
         if (p.getInventory().getItemInMainHand().getItemMeta() == null) return;
-        if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("수 표") & p.getInventory().getItemInMainHand().getType() == Material.PAPER) {
+        if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("수 표") && p.getInventory().getItemInMainHand().getType() == Material.PAPER) {
             List<String> lore = p.getInventory().getItemInMainHand().getItemMeta().getLore();
             if (lore == null) return;
             if (lore.size() != 3) return;

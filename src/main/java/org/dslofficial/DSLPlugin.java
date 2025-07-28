@@ -2,7 +2,7 @@ package org.dslofficial;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
+
 import org.dslofficial.commands.*;
 import org.dslofficial.commands.completes.*;
 import org.dslofficial.commands.replaces.*;
@@ -13,8 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dslofficial.util.PrintHeader;
 import org.dslofficial.util.GetPlayer;
 import org.dslofficial.tasks.*;
+import org.dslofficial.util.SharedData;
 
-import java.io.*;
+import java.io.File;
 
 import java.util.Objects;
 
@@ -24,8 +25,8 @@ public final class DSLPlugin extends JavaPlugin {
         return dataFolder;
     }
 
-    public static String url = "https://dslbackend.kro.kr/dslofficial/minecraft/";
     public static Server server;
+    public static final SharedData sharedData = new SharedData();
 
     @Override
     public void onEnable() {
@@ -56,8 +57,8 @@ public final class DSLPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Event(), this);
 
         // Tasks
-        BukkitTask autoItemClear = new AutoItemClear(this).runTaskTimer(this, 0L, 12000L);
-        BukkitTask autoReload = new AutoReload().runTaskTimer(this, 0L, 120L);
+        new AutoItemClear(this).runTaskTimer(this, 0L, 12000L);
+        new AutoReload().runTaskTimer(this, 0L, 120L);
 
         // Command
 
@@ -78,11 +79,16 @@ public final class DSLPlugin extends JavaPlugin {
         // Console 전용 명령어
         Objects.requireNonNull(getCommand("mm")).setExecutor(new MoneyManagement());
         Objects.requireNonNull(getCommand("stop")).setExecutor(new Stop());
+        sharedData.setBoolean("isrunning_Stop", false);
+
         Objects.requireNonNull(getCommand("addplayer")).setExecutor(new AddPlayer()); // console only.
 
         // 공개 명령어
         Objects.requireNonNull(getCommand("money")).setExecutor(new Money());
         Objects.requireNonNull(getCommand("money")).setTabCompleter(new MoneyComplete());
+
+        Objects.requireNonNull(getCommand("clearitem")).setExecutor(new ClearItem());
+        sharedData.setBoolean("isrunning_ClearItem", false);
     }
 
     @Override
