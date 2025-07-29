@@ -10,6 +10,7 @@ import org.dslofficial.event.Event;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.dslofficial.event.UIEvent;
 import org.dslofficial.util.PrintHeader;
 import org.dslofficial.util.GetPlayer;
 import org.dslofficial.tasks.*;
@@ -55,6 +56,7 @@ public final class DSLPlugin extends JavaPlugin {
 
         // Event
         getServer().getPluginManager().registerEvents(new Event(), this);
+        getServer().getPluginManager().registerEvents(new UIEvent(), this);
 
         // Tasks
         new AutoItemClear(this).runTaskTimer(this, 0L, 12000L);
@@ -80,8 +82,10 @@ public final class DSLPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("mm")).setExecutor(new MoneyManagement());
         Objects.requireNonNull(getCommand("stop")).setExecutor(new Stop());
         sharedData.setBoolean("isrunning_Stop", false);
+        Objects.requireNonNull(getCommand("addplayer")).setExecutor(new AddPlayer());
 
-        Objects.requireNonNull(getCommand("addplayer")).setExecutor(new AddPlayer()); // console only.
+        // Client 전용 명령어
+        Objects.requireNonNull(getCommand("menu")).setExecutor(new Menu());
 
         // 공개 명령어
         Objects.requireNonNull(getCommand("money")).setExecutor(new Money());

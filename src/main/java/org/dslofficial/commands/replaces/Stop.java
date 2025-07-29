@@ -46,7 +46,6 @@ public class Stop implements CommandExecutor {
 
                 System.out.println("* 수고하셨습니다 *\n모든 수정사항이 저장되었으며 서버가 " + ChatColor.RED + "종료" + ChatColor.YELLOW + "되었습니다.\n" + ChatColor.GREEN + "서버 가동 기간 : " + Reload.uptime_str);
                 s.shutdown();
-                DSLPlugin.sharedData.setBoolean("isrunning_Stop", false);
             });
         } else {
             DSLPlugin.sharedData.setBoolean("isrunning_Stop", false);

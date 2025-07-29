@@ -40,6 +40,11 @@ commands:
     description: 특정 플레이어의 돈을 설정할 수 있는 명령어입니다. (You can use this command in bukkit console only.)
     usage: '/mm [플레이어] set [금액]'
 
+  # Client 전용 명령어
+  menu:
+    description: 서버에서 활동 시 유용한 기능을 모아둔 메뉴를 열 수 있습니다.
+    aliases: 메뉴
+
   # 공개 명령어
 
   money:

@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class Reload {
-    public static String uptime_str = "";
+    public static volatile String uptime_str = "";
     public static void reload(Player p) {
         Server s = DSLPlugin.server;
 

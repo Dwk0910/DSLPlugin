@@ -1,18 +1,19 @@
 package org.dslofficial.event;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.*;
@@ -63,7 +64,7 @@ public class Event implements Listener {
 
         if (e.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
             Date date = new Date(p.getLastPlayed());
-            Format format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            Format format = new SimpleDateFormat("yyyy.MM.dd. HH:mm:ss");
             p.sendMessage("\n\n\n\n");
             p.sendMessage(ChatColor.AQUA + p.getName() + ChatColor.WHITE + ChatColor.BOLD + "님, 반갑습니다!");
             p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "마지막 로그인 : " + ChatColor.GOLD + format.format(date));
@@ -172,6 +173,12 @@ public class Event implements Listener {
         e.setCancelled(true);
     }
 
+    @EventHandler
+    public void onExplosionPrime(ExplosionPrimeEvent e) {
+        e.getEntity().remove();
+        e.setCancelled(true);
+    }
+
     // 인터렉트 이벤트 (아이템액자)
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
@@ -182,7 +189,6 @@ public class Event implements Listener {
             if (!Objects.requireNonNull(p.getInventory().getItemInMainHand().getItemMeta()).getDisplayName().contains("ImageMap")) e.setCancelled(true);
         }
     }
-
 
     // 인터렉트 이벤트 (수표)
     @EventHandler
