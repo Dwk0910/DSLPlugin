@@ -58,8 +58,8 @@ public class Reload {
 
         String playerName = p.getName();
 
-        Score name = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "이름 : " + ChatColor.RESET + ChatColor.AQUA + playerName);
-        Score permission = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "역할 : " + ChatColor.RESET + PermissionSyntaxing.get(GetPlayer.run(playerName).get("role").toString()));
+        Score name = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "이ㅤ름 : " + ChatColor.RESET + ChatColor.AQUA + playerName);
+        Score permission = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "역ㅤ할 : " + ChatColor.RESET + PermissionSyntaxing.get(GetPlayer.run(playerName).get("role").toString()));
         Score money = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "소지금 : " + ChatColor.RESET + ChatColor.YELLOW + GetPlayer.run(p.getName()).get("money") + " DS");
         Score online = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "온라인 : " + ChatColor.RESET + ChatColor.GREEN + online_s);
         Score uptimescore = obj_sc.getScore("" + ChatColor.WHITE + ChatColor.BOLD + "업타임 : " + ChatColor.RESET + ChatColor.DARK_GREEN + uptime_str);

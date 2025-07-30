@@ -1,18 +1,19 @@
 package org.dslofficial.event;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.*;
@@ -28,9 +29,11 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.List;
@@ -39,10 +42,7 @@ public class Event implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (!p.hasPlayedBefore())
-            e.setJoinMessage(PrintHeader.header("info", ChatColor.BLUE + "" + ChatColor.BOLD + e.getPlayer().getName() + ChatColor.YELLOW + " 님이 서버에 처음 들어오셨습니다!!" + ChatColor.AQUA + ChatColor.BOLD + " 환영합니다!"));
         e.setJoinMessage(PrintHeader.header("info", ChatColor.AQUA + e.getPlayer().getName() + ChatColor.YELLOW + " 님이 서버에 참여하셨습니다"));
-
         try {
             JSONParser parser = new JSONParser();
             FileReader reader = new FileReader(DSLPlugin.dataFolder + File.separator + "playerlist.dat");
@@ -51,8 +51,12 @@ public class Event implements Listener {
             Object playerData = players.get(p.getName());
             if (playerData == null)
                 p.kickPlayer(PrintHeader.header("exitmsg/kick", "서버에 아직 가입되지 않으셨습니다. 가입을 먼저 한 후, 다시 시도해 주세요.\n(아이디가 바뀌였다면 관리자에게 문의 바랍니다)"));
-        } catch (IOException | ParseException ex) {
+
+            p.setResourcePack(DSLPlugin.resourcepackURL, DSLPlugin.resourcepackHash, true);
+        } catch (ParseException ex) {
             DSLPlugin.server.broadcastMessage(PrintHeader.header("error", "playerlist.dat파일이 손상되었습니다!!"));
+        } catch (IOException ex) {
+            DSLPlugin.server.broadcastMessage(PrintHeader.header("error", ex.toString()));
         }
     }
 
@@ -60,24 +64,31 @@ public class Event implements Listener {
     @EventHandler
     public void onResourceLoad(PlayerResourcePackStatusEvent e) {
         Player p = e.getPlayer();
-
         if (e.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
-            Date date = new Date(p.getLastPlayed());
-            Format format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-            p.sendMessage("\n\n\n\n");
-            p.sendMessage(ChatColor.AQUA + p.getName() + ChatColor.WHITE + ChatColor.BOLD + "님, 반갑습니다!");
-            p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "마지막 로그인 : " + ChatColor.GOLD + format.format(date));
-            p.sendMessage("\n\n\n\n");
+            if (!DSLPlugin.alreadyIn.contains(p.getUniqueId())) {
+                Date date = new Date(p.getLastPlayed());
+                Format format = new SimpleDateFormat("yyyy.MM.dd. HH:mm:ss");
+                p.sendMessage("\n\n\n\n");
+                p.sendMessage(ChatColor.AQUA + p.getName() + ChatColor.WHITE + ChatColor.BOLD + "님, 반갑습니다!");
+                p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "마지막 로그인 : " + ChatColor.GOLD + format.format(date));
+                p.sendMessage("\n\n\n\n");
+                DSLPlugin.alreadyIn.add(p.getUniqueId());
+            }
+        } else if (e.getStatus() == PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD) {
+            System.out.println(DSLPlugin.resourcepackURL);
+            System.out.println(Arrays.toString(DSLPlugin.resourcepackHash));
         } else {
             if (e.getStatus() == PlayerResourcePackStatusEvent.Status.ACCEPTED) return;
             p.kickPlayer(PrintHeader.header("exitmsg/kick", "서버에 들어오시려면 리소스팩을 다운로드 하여야 합니다. (STATUS: " + e.getStatus() + ")\n(다운로드 오류가 발생한 경우 관리자에게 문의해 주세요)"));
             return;
         }
+
         Reload.reload(p);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        DSLPlugin.alreadyIn.remove(e.getPlayer().getUniqueId());
         e.setQuitMessage(PrintHeader.header("info", ChatColor.AQUA + e.getPlayer().getName() + ChatColor.YELLOW + " 님이 서버에서 나가셨습니다"));
     }
 
@@ -172,6 +183,12 @@ public class Event implements Listener {
         e.setCancelled(true);
     }
 
+    @EventHandler
+    public void onExplosionPrime(ExplosionPrimeEvent e) {
+        e.getEntity().remove();
+        e.setCancelled(true);
+    }
+
     // 인터렉트 이벤트 (아이템액자)
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent e) {
@@ -182,7 +199,6 @@ public class Event implements Listener {
             if (!Objects.requireNonNull(p.getInventory().getItemInMainHand().getItemMeta()).getDisplayName().contains("ImageMap")) e.setCancelled(true);
         }
     }
-
 
     // 인터렉트 이벤트 (수표)
     @EventHandler
