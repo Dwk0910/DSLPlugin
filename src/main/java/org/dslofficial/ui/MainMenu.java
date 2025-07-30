@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
@@ -24,8 +25,9 @@ import java.util.List;
 
 public class MainMenu {
     public static final String uiName = ChatColor.BLUE + "" + ChatColor.BOLD + "메인메뉴";
-    public static final UIItemMap itemMap = new UIItemMap();
+    public static UIItemMap itemMap;
     public static void openUI(Player player) {
+        itemMap = new UIItemMap();
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.8f);
 
         // 장식용 유리판
@@ -67,6 +69,15 @@ public class MainMenu {
         gold.setItemMeta(itemMeta);
         itemMap.put(new UIItem(gold, 25), null);
 
+        // goback
+        ItemStack compass_upper = new ItemStack(Material.COMPASS);
+        itemMeta = Objects.requireNonNull(compass_upper.getItemMeta());
+        itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "이전 지역으로 이동");
+        itemMeta.setLore(List.of(ChatColor.WHITE + "이곳으로 텔레포트 하기 " + ChatColor.BLUE + ChatColor.BOLD + "이전 지역" + ChatColor.WHITE + "으로 다시 돌아갑니다."));
+        itemMeta.addEnchant(Enchantment.LOYALTY, 10, true);
+        compass_upper.setItemMeta(itemMeta);
+        itemMap.put(new UIItem(compass_upper, 10), null);
+
         // gohome
         ItemStack compass = new ItemStack(Material.COMPASS);
         itemMeta = Objects.requireNonNull(compass.getItemMeta());
@@ -74,6 +85,14 @@ public class MainMenu {
         itemMeta.setLore(List.of(ChatColor.GRAY + "/sethome" + ChatColor.WHITE + " 으로 설정한 집으로 " + ChatColor.RED + ChatColor.BOLD + "텔레포트" + ChatColor.RESET + ChatColor.WHITE + "합니다."));
         compass.setItemMeta(itemMeta);
         itemMap.put(new UIItem(compass, 19), "gotohome");
+
+        // gopoint
+        ItemStack nameTag = new ItemStack(Material.NAME_TAG);
+        itemMeta = Objects.requireNonNull(nameTag.getItemMeta());
+        itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "지정된 포인트로 이동하기");
+        itemMeta.setLore(List.of(ChatColor.WHITE + "지정되어 있는 포인트로 " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "이동" + ChatColor.WHITE + "하거나 포인트를 " + ChatColor.RED + ChatColor.BOLD + "관리" + ChatColor.WHITE + "합니다."));
+        nameTag.setItemMeta(itemMeta);
+        itemMap.put(new UIItem(nameTag, 28), "point");
 
         // wood axe
         ItemStack wood_axe = new ItemStack(Material.WOODEN_AXE);
@@ -83,13 +102,21 @@ public class MainMenu {
         wood_axe.setItemMeta(itemMeta);
         itemMap.put(new UIItem(wood_axe, 20), "building_help");
 
+        // book
+        ItemStack book = new ItemStack(Material.BOOK);
+        itemMeta = Objects.requireNonNull(book.getItemMeta());
+        itemMeta.setDisplayName(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "명령어 사용 도우미");
+        itemMeta.setLore(List.of(ChatColor.WHITE + "서버 내 커맨드를 직접적으로 사용하시기에 어려워하시는 분들을 위한", ChatColor.YELLOW + "" + ChatColor.BOLD + "명령어 사용 도우미" + ChatColor.WHITE + "입니다.", "", ChatColor.WHITE + "멤버 여러분께서는 직접" + ChatColor.BOLD + " 채팅으로 명령어를 치지 않고도", ChatColor.WHITE + "" + ChatColor.BOLD + "이곳에서 메뉴를 눌러" + ChatColor.WHITE + " 서버 내 원하는 커맨드를" + ChatColor.AQUA + ChatColor.BOLD + " 작동시키실 수 있습니다."));
+        book.setItemMeta(itemMeta);
+        itemMap.put(new UIItem(book, 29), "command_helper");
+
         // red concrete
         ItemStack concrete = new ItemStack(Material.RED_CONCRETE);
         itemMeta = Objects.requireNonNull(concrete.getItemMeta());
         itemMeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "서버 나가기");
-        itemMeta.setLore(List.of(ChatColor.WHITE + "클릭하면 서버와의 연결이 즉시 " + ChatColor.RED + ChatColor.BOLD + "종료" + ChatColor.RESET + ChatColor.WHITE + "됩니다."));
+        itemMeta.setLore(List.of(ChatColor.WHITE + "클릭하면 서버와의 연결이 " + ChatColor.RED + ChatColor.BOLD + "즉시 종료" + ChatColor.RESET + ChatColor.WHITE + "됩니다."));
         concrete.setItemMeta(itemMeta);
-        itemMap.put(new UIItem(concrete, 40), "server_quit");
+        itemMap.put(new UIItem(concrete, 44), "server_quit");
 
         // inventory에 등록
         Inventory gui = Bukkit.createInventory(null, 45, uiName);

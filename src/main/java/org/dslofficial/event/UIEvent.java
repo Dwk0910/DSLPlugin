@@ -28,6 +28,7 @@ public class UIEvent implements Listener {
             ItemStack clickedItem = e.getCurrentItem();
 
             if (clickedItem != null && clickedItem.getType() != Material.AIR) {
+                // 어차피 이 이벤트가 일어나는 시점에는 itemMap이 무조건 null이 아니므로 걱정 ㄴㄴ
                 String registeredName = MainMenu.itemMap.getRegisteredName(clickedItem);
                 if (registeredName != null) {
                     switch (registeredName) {
