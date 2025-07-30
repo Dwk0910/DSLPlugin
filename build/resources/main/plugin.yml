@@ -55,3 +55,6 @@ commands:
   clearitem:
     description: 떨어진 아이템을 청소하는 수동 명령어입니다.
     aliases: ci
+
+  reloadresource:
+    description: 서버 내에 새로운 리소스팩을 적용시킵니다.

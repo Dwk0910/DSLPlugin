@@ -54,10 +54,19 @@ public class MainMenu {
         mySkull.setItemMeta(meta);
         itemMap.put(new UIItem(mySkull, 22), null); // EventHandle을 할 필요가 없으므로 registeredName을 null로 등록
 
+        // vote
+        ItemStack paper = new ItemStack(Material.PAPER);
+        ItemMeta itemMeta = Objects.requireNonNull(paper.getItemMeta());
+        itemMeta.setDisplayName(net.md_5.bungee.api.ChatColor.of("#56D4FC") + "" + ChatColor.BOLD + "새로운 투표 생성");
+        itemMeta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
+        itemMeta.setLore(List.of(ChatColor.WHITE + "멤버들에게 의견을 받을 수 있는 " + ChatColor.BLUE + ChatColor.BOLD + "투표" + ChatColor.WHITE + "를 생성합니다."));
+        paper.setItemMeta(itemMeta);
+        itemMap.put(new UIItem(paper, 15), "vote");
+
         // uptime
         Reload.reload(player);
         ItemStack arrow = new ItemStack(Material.SPECTRAL_ARROW);
-        ItemMeta itemMeta = Objects.requireNonNull(arrow.getItemMeta());
+        itemMeta = Objects.requireNonNull(arrow.getItemMeta());
         itemMeta.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "서버 업타임 : " + ChatColor.GREEN + Reload.uptime_str);
         arrow.setItemMeta(itemMeta);
         itemMap.put(new UIItem(arrow, 24), null);
